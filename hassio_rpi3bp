@@ -15,6 +15,15 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Change the hostname to hassio
+$old_hostname="$(cat /etc/hostname)"
+$new_hostname="hassio"
+
+sed -i "s/$old_hostname/$new_hostname/g" /etc/hostname
+sed -i "s/$old_hostname/$new_hostname/g" /etc/hosts
+/etc/init.d/hostname.sh start
+
+# Install missing requirements
 requirements=("socat" "jq" "curl" "avahi-daemon" "dbus-daemon")
 missing=
 
@@ -34,6 +43,7 @@ if [[ ! $(command -v docker) ]]; then
   curl -sSL https://get.docker.com | sh
 fi
 
+# Check again for missing requirements
 requirements=("docker" "bash" "socat" "jq" "curl" "avahi-daemon" "dbus-daemon")
 missing=
 
@@ -52,8 +62,16 @@ else
   echo "All requirements found!"
 fi
 
+# Install Hass.io
 echo "Installing Hass.io..."
 curl -sL https://raw.githubusercontent.com/home-assistant/hassio-build/master/install/hassio_install | bash -s -- -m raspberrypi3
 
+# Hass.io should now be installed!
 echo
-echo "Done."
+ip_addr=$(hostname -I | cut -d ' ' -f1)
+cat <<EOT
+Hass.io is now installing Home Assistant. This process may take up to 20
+minutes. Please visit http://hassio.local:8123/ in your browser and wait
+for Home Assistant to load. If the previous URL does not work, please try
+http://${ip_addr}:8123/
+EOT
