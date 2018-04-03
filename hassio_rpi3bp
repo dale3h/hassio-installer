@@ -16,12 +16,13 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Change the hostname to hassio
-$old_hostname="$(cat /etc/hostname)"
-$new_hostname="hassio"
+old_hostname="$(cat /etc/hostname)"
+new_hostname="hassio"
 
 sed -i "s/$old_hostname/$new_hostname/g" /etc/hostname
 sed -i "s/$old_hostname/$new_hostname/g" /etc/hosts
-/etc/init.d/hostname.sh start
+
+[[ $(hostname "$HOSTNAME") ]] || echo "Hostname will be changed on next reboot: $new_hostname"
 
 # Install missing requirements
 requirements=("socat" "jq" "curl" "avahi-daemon" "dbus-daemon")
