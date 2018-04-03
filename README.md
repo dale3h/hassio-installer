@@ -2,11 +2,9 @@
 
 This script will install all [requirements], and then install [Hass.io]. Please report any [issues] that experience.
 
-**Please note:** *I do not own a Raspberry Pi 3 B+, so I am unable to test this myself.*
-
 ## Requirements
 
-* Raspberry Pi 3 B+
+* [Raspberry Pi 3 B+]
 * [Raspbian Stretch Lite]
 
 ## Instructions
@@ -26,5 +24,6 @@ curl -sL https://raw.githubusercontent.com/dale3h/hassio-installer/master/hassio
 
 [Hass.io]: https://www.home-assistant.io/hassio/
 [issues]: /issues
+[Raspberry Pi 3 B+]: http://a.co/ciXqByX
 [Raspbian Stretch Lite]: https://downloads.raspberrypi.org/raspbian_lite_latest
 [requirements]: https://github.com/home-assistant/hassio-build/blob/master/install/README.md#requirements
