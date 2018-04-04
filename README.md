@@ -22,6 +22,11 @@ curl -sL https://raw.githubusercontent.com/dale3h/hassio-installer/master/hassio
 - If you plan to install via SSH, be sure to create a file named `ssh` on your SD card in `/boot` to enable SSH on first boot.
 - If you plan to connect via WiFi, be sure to setup your `wpa_supplicant.conf` file in `/boot` prior to your first boot.
 
+## Known Issues
+
+- "Bluetooth BCM43xx" add-on does not work
+- "SSH server" add-on (from **Official add-ons**) does not work
+
 [Hass.io]: https://www.home-assistant.io/hassio/
 [issues]: /issues
 [Raspberry Pi 3 B+]: http://a.co/ciXqByX
