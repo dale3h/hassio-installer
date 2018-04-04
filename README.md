@@ -24,8 +24,8 @@ curl -sL https://raw.githubusercontent.com/dale3h/hassio-installer/master/hassio
 
 ## Known Issues
 
-- "Bluetooth BCM43xx" add-on does not work
-- "SSH server" add-on (from **Official add-ons**) does not work
+- **Bluetooth BCM43xx** add-on does not work
+- **SSH server** add-on (from **Official add-ons**) does not work
 
 [Hass.io]: https://www.home-assistant.io/hassio/
 [issues]: /issues
