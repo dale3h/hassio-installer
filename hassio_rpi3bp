@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ###########################################################
 ###########################################################
 ##                                                       ##
@@ -7,72 +6,99 @@
 ##                                                       ##
 ###########################################################
 ###########################################################
+set -o errexit  # Exit script when a command exits with non-zero status
+set -o errtrace # Exit on error inside any functions or sub-shells
+set -o nounset  # Exit script on use of an undefined variable
+set -o pipefail # Return exit status of the last command in the pipe that failed
 
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root."
-  echo "Please try again after running:"
-  echo "  sudo su"
-  exit 1
-fi
+# ==============================================================================
+# GLOBALS
+# ==============================================================================
+readonly HOSTNAME="hassio"
+readonly HASSIO_INSTALLER="https://raw.githubusercontent.com/home-assistant/hassio-build/master/install/hassio_install"
+readonly REQUIREMENTS=(
+  apparmor-utils
+  apt-transport-https
+  avahi-daemon
+  ca-certificates
+  curl
+  dbus
+  jq
+  network-manager
+  socat
+  software-properties-common
+)
 
-# Change the hostname to hassio
-old_hostname="$(cat /etc/hostname)"
-new_hostname="hassio"
+# ==============================================================================
+# SCRIPT LOGIC
+# ==============================================================================
 
-sed -i "s/$old_hostname/$new_hostname/g" /etc/hostname
-sed -i "s/$old_hostname/$new_hostname/g" /etc/hosts
+# ------------------------------------------------------------------------------
+# Ensures the hostname of the Pi is correct.
+# ------------------------------------------------------------------------------
+update_hostname() {
+  old_hostname=<(/etc/hostname)
+  if [[ "${old_hostname}" != "${HOSTNAME}" ]]; then
+    sed -i "s/${old_hostname}/${HOSTNAME}/g" /etc/hostname
+    sed -i "s/${old_hostname}/${HOSTNAME}/g" /etc/hosts
+    hostname "${HOSTNAME}"
+    echo "Hostname will be changed on next reboot: ${HOSTNAME}"
+  fi
+}
 
-[[ $(hostname "$HOSTNAME") ]] || echo "Hostname will be changed on next reboot: $new_hostname"
-
-# Install missing requirements
-requirements=("socat" "jq" "curl" "avahi-daemon" "dbus-daemon")
-missing=
-
-for cmd in ${requirements[@]}; do
-  package="$cmd"
-  [[ "$cmd" == "dbus-daemon" ]] && package="dbus"
-  [[ $(command -v "$cmd") ]] || missing="$missing$package "
-done
-
-if [[ -n "$missing" ]]; then
-  echo "Attempting install of: $missing"
+# ------------------------------------------------------------------------------
+# Installs all required software packages and tools
+# ------------------------------------------------------------------------------
+install_requirements() {
+  echo "Updating APT packages list..."
   apt-get update
-  apt-get install -y $missing
-fi
 
-if [[ ! $(command -v docker) ]]; then
+  echo "Ensure all requirements are installed..."
+  apt-get install -y "${REQUIREMENTS[@]}"
+}
+
+# ------------------------------------------------------------------------------
+# Installs the Docker engine
+# ------------------------------------------------------------------------------
+install_docker() {
+  echo "Installing Docker..."
   curl -sSL https://get.docker.com | sh
-fi
+}
 
-# Check again for missing requirements
-requirements=("docker" "bash" "socat" "jq" "curl" "avahi-daemon" "dbus-daemon" "apparmor-utils" "network-manager")
-missing=
+# ------------------------------------------------------------------------------
+# Installs and starts Hass.io
+# ------------------------------------------------------------------------------
+install_hassio() {
+  echo "Installing Hass.io..."
+  curl -sL "${HASSIO_INSTALLER}" | bash -s
+}
 
-echo "Checking for all requirements..."
-for cmd in ${requirements[@]}; do
-  package="$cmd"
-  [[ "$cmd" == "dbus-daemon" ]] && package="dbus"
-  [[ $(command -v "$cmd") ]] || missing="$missing$package "
-done
+# ==============================================================================
+# RUN LOGIC
+# ------------------------------------------------------------------------------
+main() {
+  # Are we root?
+  if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root."
+    echo "Please try again after running:"
+    echo "  sudo su"
+    exit 1
+  fi
 
-if [[ -n "$missing" ]]; then
-  echo "Could not install requirements: $missing"
-  echo "Please install manually and run this script again."
-  exit 1
-else
-  echo "All requirements found!"
-fi
+  # Install ALL THE THINGS!
+  install_requirements
+  install_docker
+  install_hassio
 
-# Install Hass.io
-echo "Installing Hass.io..."
-curl -sL https://raw.githubusercontent.com/home-assistant/hassio-build/master/install/hassio_install | bash -s -- -m raspberrypi3
+  # Friendly closing message
+  ip_addr=$(hostname -I | cut -d ' ' -f1)
+  echo "======================================================================="
+  echo "Hass.io is now installing Home Assistant."
+  echo "This process may take up to 20 minutes. Please visit:"
+  echo "http://${HOSTNAME}.local:8123/ in your browser and wait"
+  echo "for Home Assistant to load."
+  echo "If the previous URL does not work, please try http://${ip_addr}:8123/"
 
-# Hass.io should now be installed!
-echo
-ip_addr=$(hostname -I | cut -d ' ' -f1)
-cat <<EOT
-Hass.io is now installing Home Assistant. This process may take up to 20
-minutes. Please visit http://hassio.local:8123/ in your browser and wait
-for Home Assistant to load. If the previous URL does not work, please try
-http://${ip_addr}:8123/
-EOT
+  exit 0
+}
+main
