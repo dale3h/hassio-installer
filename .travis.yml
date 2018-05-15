@@ -1,0 +1,11 @@
+language: bash
+
+os: linux
+dist: trusty
+sudo: required
+
+script:
+  - shellcheck hassio_rpi3bp
+
+notifications:
+  email: false
