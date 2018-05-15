@@ -1,14 +1,11 @@
 language: bash
+
+os: linux
+dist: trusty
 sudo: required
-os:
-  - linux
-addons:
-  apt:
-    sources:
-      - debian-sid
-    packages:
-      - shellcheck
+
 script:
   - shellcheck hassio_rpi3bp
+
 notifications:
   email: false
