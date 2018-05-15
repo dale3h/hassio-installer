@@ -9,6 +9,6 @@ addons:
     packages:
       - shellcheck
 script:
-  - shellcheck your-script.sh
+  - shellcheck hassio_rpi3bp
 notifications:
   email: false
