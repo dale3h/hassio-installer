@@ -1,0 +1,14 @@
+language: bash
+sudo: required
+os:
+  - linux
+addons:
+  apt:
+    sources:
+      - debian-sid
+    packages:
+      - shellcheck
+script:
+  - shellcheck your-script.sh
+notifications:
+  email: false
