@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ###########################################################
 ###########################################################
 ##                                                       ##
@@ -86,6 +86,7 @@ main() {
   fi
 
   # Install ALL THE THINGS!
+  update_hostname
   install_requirements
   install_docker
   install_hassio
