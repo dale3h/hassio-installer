@@ -28,8 +28,8 @@ and this project adheres to [Semantic Versioning][semantic-versioning].
 
 - First version of the Hass.io Installer for Raspberry Pi 3 B+
 
-[keep-a-changelog]: http://keepachangelog.com/en/1.0.0/
-[semantic-versioning]: http://semver.org/spec/v2.0.0.html
+[keep-a-changelog]: https://keepachangelog.com/en/1.0.0/
+[semantic-versioning]: https://semver.org/spec/v2.0.0.html
 [1.0.0]: https://github.com/dale3h/hassio-installer/tree/v1.0.0
 [1.1.0]: https://github.com/dale3h/hassio-installer/compare/v1.0.0...v1.1.0
 [1.1.1]: https://github.com/dale3h/hassio-installer/compare/v1.1.0...v1.1.1
