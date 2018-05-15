@@ -45,7 +45,7 @@ if [[ ! $(command -v docker) ]]; then
 fi
 
 # Check again for missing requirements
-requirements=("docker" "bash" "socat" "jq" "curl" "avahi-daemon" "dbus-daemon")
+requirements=("docker" "bash" "socat" "jq" "curl" "avahi-daemon" "dbus-daemon" "apparmor-utils" "network-manager")
 missing=
 
 echo "Checking for all requirements..."
