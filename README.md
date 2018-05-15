@@ -93,7 +93,7 @@ SOFTWARE.
 [semantic-versioning]: https://semver.org/spec/v2.0.0.html
 [stretch-lite]: https://downloads.raspberrypi.org/raspbian_lite_latest
 
-[badge-discord]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge
+[badge-discord]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge&maxAge=3600
 [badge-docs]: https://img.shields.io/badge/read-docs-blue.svg?style=for-the-badge
 [badge-donate]: https://img.shields.io/badge/beerpay-$5-orange.svg?style=for-the-badge
 [badge-version]: https://img.shields.io/badge/version-1.1.1-red.svg?style=for-the-badge
