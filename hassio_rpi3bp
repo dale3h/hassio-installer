@@ -37,7 +37,7 @@ readonly REQUIREMENTS=(
 # Ensures the hostname of the Pi is correct.
 # ------------------------------------------------------------------------------
 update_hostname() {
-  old_hostname=<(/etc/hostname)
+  old_hostname=$(< /etc/hostname)
   if [[ "${old_hostname}" != "${HOSTNAME}" ]]; then
     sed -i "s/${old_hostname}/${HOSTNAME}/g" /etc/hostname
     sed -i "s/${old_hostname}/${HOSTNAME}/g" /etc/hosts
