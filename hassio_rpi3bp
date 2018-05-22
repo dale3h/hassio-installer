@@ -73,6 +73,17 @@ install_hassio() {
   curl -sL "${HASSIO_INSTALLER}" | bash -s -- -m raspberrypi3
 }
 
+# ------------------------------------------------------------------------------
+# Configure network-manager to disable random MAC-address on Wi-Fi
+# ------------------------------------------------------------------------------
+config_network_manager() {
+  config_file="/etc/NetworkManager/NetworkManager.conf"
+  echo -e "\n[device]" >> $config_file
+  echo "wifi.scan-rand-mac-address=no" >> $config_file
+  echo -e "\n[connection]" >> $config_file
+  echo "wifi.clone-mac-address=preserve" >> $config_file
+}
+
 # ==============================================================================
 # RUN LOGIC
 # ------------------------------------------------------------------------------
@@ -88,6 +99,7 @@ main() {
   # Install ALL THE THINGS!
   update_hostname
   install_requirements
+  config_network_manager
   install_docker
   install_hassio
 
