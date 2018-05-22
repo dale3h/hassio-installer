@@ -77,11 +77,12 @@ install_hassio() {
 # Configure network-manager to disable random MAC-address on Wi-Fi
 # ------------------------------------------------------------------------------
 config_network_manager() {
-  config_file="/etc/NetworkManager/NetworkManager.conf"
-  echo -e "\n[device]" >> $config_file
-  echo "wifi.scan-rand-mac-address=no" >> $config_file
-  echo -e "\n[connection]" >> $config_file
-  echo "wifi.clone-mac-address=preserve" >> $config_file
+  {
+    echo -e "\n[device]";
+    echo "wifi.scan-rand-mac-address=no";
+    echo -e "\n[connection]";
+    echo "wifi.clone-mac-address=preserve";
+  } >> "/etc/NetworkManager/NetworkManager.conf"
 }
 
 # ==============================================================================
