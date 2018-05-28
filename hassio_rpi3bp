@@ -37,7 +37,7 @@ readonly REQUIREMENTS=(
 # Ensures the hostname of the Pi is correct.
 # ------------------------------------------------------------------------------
 update_hostname() {
-  old_hostname=<(/etc/hostname)
+  old_hostname=$(< /etc/hostname)
   if [[ "${old_hostname}" != "${HOSTNAME}" ]]; then
     sed -i "s/${old_hostname}/${HOSTNAME}/g" /etc/hostname
     sed -i "s/${old_hostname}/${HOSTNAME}/g" /etc/hosts
@@ -73,6 +73,18 @@ install_hassio() {
   curl -sL "${HASSIO_INSTALLER}" | bash -s -- -m raspberrypi3
 }
 
+# ------------------------------------------------------------------------------
+# Configure network-manager to disable random MAC-address on Wi-Fi
+# ------------------------------------------------------------------------------
+config_network_manager() {
+  {
+    echo -e "\n[device]";
+    echo "wifi.scan-rand-mac-address=no";
+    echo -e "\n[connection]";
+    echo "wifi.clone-mac-address=preserve";
+  } >> "/etc/NetworkManager/NetworkManager.conf"
+}
+
 # ==============================================================================
 # RUN LOGIC
 # ------------------------------------------------------------------------------
@@ -88,6 +100,7 @@ main() {
   # Install ALL THE THINGS!
   update_hostname
   install_requirements
+  config_network_manager
   install_docker
   install_hassio
 
