@@ -43,6 +43,9 @@ curl -sL https://raw.githubusercontent.com/dale3h/hassio-installer/master/hassio
 - Port conflict when using SSH add-on
   - ***Fix:** change the port in the SSH add-on options*
 
+- Docker installation fails when using WiFi ([Could not resolve host: get.docker.com](https://github.com/dale3h/hassio-installer/issues/14)
+  - ***Fix:** use Ethernet instead*
+
 ## Changelog & Releases
 
 This project keeps a [change log][changelog]. The format of the log is based
