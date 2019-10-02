@@ -30,7 +30,7 @@ This script will install all [requirements][requirements], and then install
 1. Run this as root user (`sudo su`):
 
 ```bash
-curl -sL https://raw.githubusercontent.com/dale3h/hassio-installer/master/hassio_rpi3bp | bash -s
+curl -sL https://raw.githubusercontent.com/strongtrond/hassio-installer/master/hassio_rpi3bp | bash -s
 ```
 
 ## Known Issues
